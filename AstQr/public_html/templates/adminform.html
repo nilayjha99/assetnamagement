@@ -1,0 +1,87 @@
+    <br>
+
+    <form class="form-horizontal" onsubmit="regadmin()">
+<fieldset>
+
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="fname" class="control-label col-sm-2 col-md-3">firstname</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" id="fname" name="fnameadm" placeholder="firstname" required="">
+    
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="lname" class="control-label col-sm-2 col-md-3">lastname</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" id="lname" name="lnameadm" placeholder="lastname" required="">
+    
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="eml" class="control-label col-sm-2 col-md-3">email</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="email" class="form-control" id="eml" name="emladm" placeholder="admin email here" required="">
+    
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="psswd" class="control-label col-sm-2 col-md-3">password</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="password" class="form-control" name="psswdadm" id="psswd" placeholder="password" required="">
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="dob" class="control-label col-sm-2 col-md-3">birthdate</label>
+  <div class="col-sm-10 col-md-3">
+      <input type="date" class="form-control" id="dob" name="dobadm" required=""/>
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="dept" class="control-label col-sm-2 col-md-3">dept</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" id="dept" name="deptadm" placeholder="department here" required="">
+    
+  </div>
+</div>
+<!-- Button Group http://getbootstrap.com/components/#btn-groups -->
+<div class="form-group">
+  <div class="text-right col-sm-10 col-md-3">
+    <div id="insadminGroup" class="btn-group" role="group">
+    <button type="button"  class="btn btn-success" aria-label="submit" onclick="addadmin()">submit</button>
+        <button type="reset" class="btn btn-inverse" aria-label="reset">reset</button>
+    </div>
+    
+  </div>
+</div>
+
+</fieldset>
+</form>
+<script>
+    //"localhost:8080/rest2/webresources/admin/rega"
+    function addadmin(){
+     suins={
+    'fname':$('input[name="fnameadm"]').val(),
+    'lname':$('input[name="lnameadm"]').val(),
+    'eml':$('input[name="emladm"]').val(),
+    'psswd':$('input[name="psswdadm"]').val(),
+    'dob':$('input[name="dobadm"]').val(),
+    'dept':$('input[name="deptadm"]').val()
+};
+//$("#insuad").find('input[name="deptadm"]').val()----was removed
+$.post("http://localhost:8080/rest2/webresources/admin/rega?"+EncodeQueryData(suins),
+        function(data){
+            alert(data);
+        })
+  .fail(function(data) {
+    alert( data );
+  });
+    
+    }
+    
+    </script>

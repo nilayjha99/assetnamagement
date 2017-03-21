@@ -1,0 +1,212 @@
+<form class="form-horizontal" id="astupdfrm">
+<fieldset>
+    <br><!-- assettype Form -->
+    <div id="assetidcatch">
+<div class="form-group">
+  <label for="idassetinput" class="control-label col-sm-2">Id</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="idassetinput" name="idassetinput" placeholder="category">
+  <br>
+    <button type="button" class="btn btn-success" aria-label="submit" onclick="getasset()">submit</button>
+ 
+  </div>
+    
+</div>
+     </div>
+<script>
+    $("#test12 *").attr("disabled", "disabled").off('click');
+    </script>
+<div id="test12">  <!-- Spinbox http://getfuelux.com/javascript.html#spinbox -->
+<div class="form-group">
+  <label for="category" class="control-label col-sm-2">category</label>
+  <div class="col-sm-10">
+      <select class="form-control" id="selcat1" onclick="loadcat1()">
+    
+  </select>
+  </div>
+    
+  </div>
+
+<!-- Spinbox http://getfuelux.com/javascript.html#spinbox -->
+<div class="form-group">
+  <label for="type" class="control-label col-sm-2">type</label>
+  <div class="col-sm-10">
+    
+      <select class="form-control" id="seltype1" onfocus="loadtype1()">
+    
+  </select>
+    
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="deptid" class="control-label col-sm-2">dept. id</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="did2" placeholder="departmental id here" required="">
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="dop" class="control-label col-sm-2">Dop</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="dop2"  required="">
+    <p class="help-block">date of purchase</p>
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="po" class="control-label col-sm-2">p.o</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="po2" placeholder="purchase order number here" required="">
+    
+  </div>
+</div>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="billno" class="control-label col-sm-2">bill no.</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="billno2" placeholder="bill number here" required="">
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-sm-2"></label>
+  <div class="text-right col-sm-10">
+    <div id="insadminGroup" class="btn-group" role="group" aria-label="">
+        <button type="button" onclick="updateasset()" id="upast" name="upast" class="btn btn-success" aria-label="submit">submit</button>
+        <button type="reset" id="rst" name="rst" onclick="reseter2()" class="btn btn-primary" aria-label="reset">reset</button>
+    </div>
+    
+  </div>
+</div>
+
+</fieldset>
+</form>
+<script>
+    function getasset(){
+        //alert("i m here");
+         var vals8={id:$("input[name=idassetinput]").val() 
+        };   
+        console.log(EncodeQueryData(vals8));
+       $.get( "http://localhost:8080/rest2/webresources/assets/retrive?"+EncodeQueryData(vals8), function( data ) {
+   $("#assetidcatch *").attr("disabled", "disabled").off('click');
+   loadassetdata(data);
+}).fail(function(data){
+    alert("error:"+data);
+});
+    }
+    function loadassetdata(data){
+         $("#test12 *").attr('disabled', false).on('click');
+        var contents=data['data'];
+        console.log(contents);
+        $.each(contents,function(key,value){
+        loadcat1(value.category);
+        loadtype1(value.type);
+        $("#did2").val(value.deptid);
+        $("#dop2").val(sqlToJsDate(value.dop));
+        $("#po2").val(value.ponum);
+        $("#billno2").val(value.billno);
+    });
+}
+    function selectvalue(id,value){
+   for (var i = 0; i < id.options.length; i++) {
+        if (id.options[i].text=== value) {
+            id.options[i].selected = true;
+            return;
+        }
+        alert(id.options[i].text);
+    }
+    }
+    function reseter2(){
+        $("#selcat1").val("");
+        $("#seltype1").val("");
+        $("#did2").val("");
+        $("#dop2").val("");
+        $("#po2").val("");
+        $("#billno2").val("");
+        $("#test12 *").attr('disabled', true).off('click');
+        $("#assetidcatch *").attr("disabled", false).on('click');
+        $("input[name=idassetinput]").val("");
+    }
+    function updateasset(){
+           var vals2={
+      cat:$("#selcat1").val(),
+      type:$("#seltype1").val(),
+      deptid:$("#did2").val(),
+      dop:$("#dop2").val(),
+      po:$("#po2").val(),
+      bn:$("#billno2").val(),
+      id:$("input[name=idassetinput]").val()
+    };
+    $.post("http://localhost:8080/rest2/webresources/assets/update?"+$.param(vals2),function(data){
+        alert(data);
+        reseter2();
+    }).fail(function(data){
+        alert(data);
+    });
+
+}
+
+function sqlToJsDate(sqlDate){
+    //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
+    var sqlDateArr1 = sqlDate.split(",");
+    //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
+    var sYear = sqlDateArr1[1].trim();
+    var sqlDateArr2 = sqlDateArr1[0].split(" ");
+    var sMonth = sqlDateArr2[0].toString();
+  //  var sqlDateArr2 = sqlDateArr1[2].split(" ");
+    //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
+    var sDay = sqlDateArr2[1];
+   
+   //return (new Date(sYear+'/'+zer+'/'+zer2));
+    return (sYear+'-'+getMonth(sMonth)+'-'+sDay);
+}
+function getMonth(monthStr){
+    return new Date(monthStr+'-1-01').getMonth()+1;
+}
+function loadcat1(v){
+    $.get("http://localhost:8080/rest2/webresources/assets/getcat?a=0",function(data){
+        console.log(data);
+        var d=remove_undefined1(display_json1(data));
+             $("#selcat1").html(d);
+             selectvalue(document.getElementById("selcat1"),v);
+        
+    }).fail(function(data){
+        console.log(data);
+    });
+}   
+function loadtype1(v){
+    $.get("http://localhost:8080/rest2/webresources/assets/gettyp?a=0",function(data){
+        console.log(data);
+        var d=remove_undefined1(display_json1(data));
+             $("#seltype1").html(d);
+    selectvalue(document.getElementById("seltype1"),v);
+    }).fail(function(data){
+        console.log(data);
+    }); 
+}
+function display_json1(data) {
+    var content='';
+    $.each(data, function(i, post) {
+        if (post !== null && typeof post === 'object') {
+            content += display_json1(post);
+        } else {
+            content +=post+',';
+        }
+    });
+    return content;
+}
+function remove_undefined1(data){
+    var result='';
+    var a=data.split(",");
+    for(var i=0;i<a.length;i++){
+        if(typeof a[i] === 'undefined' || a[i]==="" || a[i]===null){
+            continue;
+        }
+        else{
+            result+='<option>'+a[i]+'</option>';
+        }
+    }
+    return result;
+}
+</script>

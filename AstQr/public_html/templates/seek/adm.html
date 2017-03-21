@@ -1,0 +1,170 @@
+<!--<a onclick="skallsu()" href="#" class="btn-primary">seek all</a>-->
+<br>
+        <button type="button"  class="btn btn-primary" aria-label="seek all" onclick="skalladm('*')">seek all</button>&nbsp;
+        <button type="button" class="btn btn-primary" aria-label="seek by id" data-toggle="modal" data-target="#skadmid">seek by id</button>&nbsp;
+        <button type="button" class="btn btn-primary" aria-label="seek by range" data-toggle="modal" data-target="#skadmr">seek by range</button>    
+<br>
+<br>
+<div id="admspace" class="">
+    
+</div>
+  <div class="container">
+  <!-- Modal fur su by id-->
+  <div class="modal fade" id="skadmid" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="skadmall">
+<fieldset>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label  class="control-label col-sm-2 col-md-3">Id</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" name="admskid" placeholder="enter admin id to seek" required="">
+  </div>
+</div>
+<!-- Button http://getbootstrap.com/css/#buttons -->
+<div class="form-group">
+  <label class="control-label col-sm-2 col-md-3" ></label>
+  <div class="text-center col-sm-10 col-md-3">
+      <button type="button"  class="btn btn-success" aria-label="" onclick="skadmbyid()">seek</button>
+  </div>
+</div>
+<script>
+    function skadmbyid(){
+        var qw=$('input[name="admskid"]').val();
+        skalladm(qw);
+    }
+    </script>
+</fieldset>
+</form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!--modal for su by id ends-->
+  <!-- modal for su by range starts--->
+    <!-- Modal -->
+  <div class="modal fade" id="skadmr" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="skadmrng">
+<fieldset>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="rmsuid" class="control-label col-sm-2 col-md-3">Id</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="number" class="form-control" name="admstskid" placeholder="start from" required="">
+    <input type="number" class="form-control" name="admenskid" placeholder="seek upto" required="">
+  </div>
+</div>
+<!-- Button http://getbootstrap.com/css/#buttons -->
+<div class="form-group">
+  <label class="control-label col-sm-2 col-md-3" ></label>
+  <div class="text-center col-sm-10 col-md-3">
+      <button type="button"  class="btn btn-success" aria-label="" onclick="skadmbyr()">seek</button>
+  </div>
+</div>
+<script>
+    function skadmbyr(){
+        var st=$('input[name="admstskid"]').val();
+        var en=$('input[name="admenskid"]').val();
+        skrngadm(st,en);
+    }
+    </script>
+</fieldset>
+</form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!--modal for su by range ends-->
+</div>
+
+<script>
+function skalladm(seeker){
+        var vals2={'skid' : seeker };
+        var url2="http://localhost:8080/rest2/webresources/admin/seekid?"+$.param(vals2);
+        resetadm();
+        admdtable(url2);
+}
+function skrngadm(st1,en1){
+    var vals2={st:st1,en:en1};
+    var url2="http://localhost:8080/rest2/webresources/admin/seek?st="+st1+"&en="+en1;
+    //resetsu();
+    
+    console.log(url2);
+        admdtable(url2);
+}
+function resetadm(){
+    $('#admspace').html("<table id=\"skadmall\" class=\"table-bordered table table-responsive\" >"+
+     "<thead>"+
+      "<tr>"+
+         "<th>id</th>"+
+         "<th>firstname</th>"+
+         "<th>lastname</th>"+
+         "<th>email</th>"+
+         "<th>password</th>"+
+         "<th>dob</th>"+
+         "<th>department</th>"+
+      "</tr>"+
+   "</thead>"+
+"</table>");
+     
+}
+function admdtable(durl){
+      resetadm();
+    var table=$('#skadmall').dataTable( {
+            "sAjaxSource": durl,     
+        "aoColumns": [
+            {"data":"idsuperadmin"},
+            {"data":"firstname"},
+            {"data":"lastname"},
+            {"data":"email"},
+            {"data":"password"},
+            {"data":"dob"},
+            {"data":"department"}
+        ],
+        "bFilter": true,
+      "bJQueryUI": true,
+      "sSearch": "Search"
+        } );
+        
+        table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+}
+</script>   
+

@@ -1,0 +1,112 @@
+
+<form name="asst" class="form-inline">
+        start:<input placeholder="enter starting id" class="form-control" type='text' id='qrst'/>
+            end:<input placeholder="enter ending id" class="form-control" type='text' id='qren'/>
+    </form>
+    <br>
+<button id="getqr" class="btn-success" onclick="three()">getqr</button>
+&nbsp;   
+    <button type="button" class="btn-primary" onclick="tableToExcel('qrcotbl', 'ASSET Table')" value="Export to Excel">
+    export as xls</button>
+<br>
+<br>
+<br>
+        <table id="qrcotbl" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>idassets</th>
+                    <th>category</th>
+                    <th>type</th>
+                    <th>deptid</th>
+                </tr>
+            </thead>
+        </table>
+    <script>
+                  var tableToExcel = (function() {
+                          var uri = 'data:application/vnd.ms-excel;base64,'
+                                  , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+    </script>
+
+    <script>
+                                
+                        function three(){
+                        var peintcon = '', abcd = '<table border=\"1\" cellpadding=\"10\" cellspacing=\"2\">';
+                                vals3 = {'st':$("#qrst").val(), 'en':$("#qren").val()};
+                                $.get("http://localhost:8080/rest2/webresources/assets/retprint?" + EncodeQueryData(vals3), function(data){
+                                var axa = data['data'];
+                                        $.each(axa, function(key, value){
+                                        peintcon += ("<img style=\"border:1px solid black;\" src=\"data:image/png;base64," + value.qrcode + "\"/img></div>&nbsp&nbsp");
+                                        });
+                                        
+                                        alert("ready to print");
+                                        printit(peintcon, "qrs");
+                           });
+                                var table = $('#qrcotbl').dataTable({
+                        "sAjaxSource": "http://localhost:8080/rest2/webresources/assets/retprint?" + EncodeQueryData(vals3),
+                                "aoColumns": [
+                                {"data":"idassets"},
+                                {"data":"category"},
+                                {"data":"type"},
+                                {"data":"deptid"}
+                                ],
+                                "bFilter": true,
+                                "bJQueryUI": true,
+                                "sSearch": "Search"
+
+                        });
+                                table.columns().every(function () {
+                        var that = this;
+                                $('input', this.footer()).on('keyup change', function () {
+                        if (that.search() !== this.value) {
+                        that
+                                .search(this.value)
+                                .draw();
+                        }
+                        });
+                        });
+                        }
+                        
+
+
+                        $(document).ready(function(){
+                        $("#button").click(function(){
+                        var vals2 = {'category': $("input[name=category]").val(),
+                                'type': $("input[name=type]").val(),
+                                'qrh':$("input[name=category]").val() + '-' + $("input[name=type]").val(),
+                                'deptid':$("input[name=deptid]").val(),
+                                'dop':$("input[name=info]").val()
+
+                        };
+                                $.post("http://localhost:8080/rest2/webresources/assets/addasset?" + EncodeQueryData(vals2),
+                                        function(data){
+                                        alert("Data: " + data + "\n");
+                                        })
+                                .fail(function() {
+                                alert("error");
+                                });
+                        });
+                                });
+                                
+    </script>
+    <script>
+                                        function printit(content, name){
+                                        if (window.print) {
+                                        var html = '<html><head></head><body onload=\"window.print()\">' + content + '</body></html>';
+                                                var uri = "data:text/html," + encodeURIComponent(html);
+                                                var myWindow = window.open(uri, name);
+                                                } else {
+                                        var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+                                                document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+                                                WebBrowser1.ExecWB(6, 2); //Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+                                                }
+                                        }
+    </script>
+

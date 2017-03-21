@@ -1,0 +1,126 @@
+<form class="form-horizontal" id="astupdfrm">
+<fieldset>
+    <br><!-- assettype Form -->
+    <div id="astypidcatch">
+<div class="form-group">
+  <label for="idinput" class="control-label col-sm-2">Id</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="idinput" name="idinput" placeholder="category">
+  <br>
+    <button type="button" class="btn btn-success" aria-label="submit" onclick="getas()">submit</button>
+ 
+  </div>
+    
+</div>
+     </div>
+<script>
+    $("#test *").attr("disabled", "disabled").off('click');
+    </script>
+<div id="test">    
+<div class="form-group">
+  <label for="textinput" class="control-label col-sm-2">Category</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="textinput" name="categoryastyp" placeholder="category">
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="textinput" class="control-label col-sm-2">Type</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="textinput" placeholder="type" name="typeastyp">
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="control-label col-sm-2" for="tara" >details</label>
+  <div class="col-sm-10">
+    <textarea class="form-control" id="tara" rows="5" name="detailsastyp"></textarea>
+    <p class="help-block"><a href="#" data-toggle="tooltip" data-placement="right" title="insert as key:value followed by ,">help</a>
+  </p>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="textinput" class="control-label col-sm-2">Rate</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="textinput" placeholder="rate in INR" name="rateastyp">
+  </div>
+</div>
+<div class="form-group">
+  <div class="text-right col-sm-10">
+    <div id="insadminGroup" class="btn-group" role="group" aria-label="">
+      <button type="button" class="btn btn-success" aria-label="submit" onclick="updastype()">update</button>
+      <button type="button" onclick="reseter()" id="rst" name="rst" class="btn btn-inverse" aria-label="reset">reset</button>
+    </div>
+    
+  </div>
+</div>
+</div>
+</fieldset>
+</form>
+<script>
+    function getas(){
+        //alert("i m here");
+         var vals8={id:$("input[name=idinput]").val() 
+        };   
+        console.log(EncodeQueryData(vals8));
+       $.get( "http://localhost:8080/rest2/webresources/astmgt/get?"+EncodeQueryData(vals8), function( data ) {
+  console.log(data);
+  alert("success");
+   $("#astypidcatch *").attr("disabled", "disabled").off('click');
+   loadastypdata(data);
+}).fail(function(data){
+    alert("error:"+data);
+});
+    }
+    function loadastypdata(data){
+         $("#test *").attr('disabled', false).on('click');
+        var contents=data['data'];
+        $.each(contents,function(key,value){
+        $("input[name=categoryastyp]").val(value.category);
+        $("input[name=typeastyp]").val(value.type);
+        $("#tara").val(metadetails(value.details));
+        $("input[name=rateastyp]").val(value.rate);
+    });
+}
+    function metadetails(det){
+        var et=JSON.stringify(det);
+        et=et.replace('\\"','');
+        et=et.replace('\\"','');
+        et=et.replace('\"','');
+        et=et.replace('\"','');
+        //console.log(et);
+        var a=et.split(",");
+        var output = '';
+              for(i=0;i<a.length;i++){
+                  output+=a[i]+",";
+              }
+//console.log(output);
+//alert(output.substring(0,output.length-1));
+return(output.substring(0,output.length-1));
+    }
+    function reseter(){
+        $("input[name=categoryastyp]").val("");
+        $("input[name=typeastyp]").val("");
+        $("#tara").val("");
+        $("input[name=rateastyp]").val("");
+        $("#test *").attr('disabled', true).off('click');
+        $("#astypidcatch *").attr("disabled", false).on('click');
+        $("input[name=idinput]").val("");
+    }
+    function updastype(){
+        var vals3={
+        id:$("input[name=idinput]").val(),  
+        cat:$("input[name=categoryastyp]").val(),
+        type:$("input[name=typeastyp]").val(),
+        info:JSON.stringify($("#tara").val()),
+        rate:$("input[name=rateastyp]").val()
+    };
+    $.post("http://localhost:8080/rest2/webresources/astmgt/edastype?"+$.param(vals3),function(data){
+        alert(data);
+    }).fail(function(data){
+        alert("error:"+data);
+        console.log(data);
+    });
+}
+</script>

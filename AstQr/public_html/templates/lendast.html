@@ -1,0 +1,51 @@
+<form class="form-horizontal">
+<fieldset>
+
+<!-- Spinbox http://getfuelux.com/javascript.html#spinbox -->
+<div class="form-group">
+  <label for="lenid" class="control-label col-sm-2">id</label>
+  <div class="col-sm-10">
+      <input type="number" class="form-control" id="lenid" />
+  </div>
+    
+  </div>
+<div class="form-group">
+  <label for="lento" class="control-label col-sm-2">issued to</label>
+  <div class="col-sm-10">
+      <input type="text" class="form-control" id="lento" />
+  </div>
+    
+  </div>
+<div class="form-group">
+  <label for="lendt" class="control-label col-sm-2">issued on</label>
+  <div class="col-sm-10">
+      <input type="date" class="form-control" id="lendt" />
+  </div>
+    
+  </div>
+<div class="form-group">
+  <div class="text-right col-sm-10">
+    <div id="lenast" class="btn-group" role="group" aria-label="">
+      <button type="button" class="btn btn-success" aria-label="submit" onclick="lendasset()">lend</button>
+      <button type="reset"  id="rst" name="rst" class="btn btn-inverse" aria-label="reset">reset</button>
+    </div>
+    
+  </div>
+</div>
+</fieldset>
+</form>
+<script>
+function lendasset(){
+    var vals2={
+        asid:$("#lenid").val(),
+        usid:$("#lento").val(),
+        lendt:$("#lendt").val()
+    };
+    $.post("http://localhost:8080/rest2/webresources/assets/lend?"+$.param(vals2),function(data){
+        alert(data);
+    }).fail(function (data){
+        alert(data);
+    });
+}
+
+</script>

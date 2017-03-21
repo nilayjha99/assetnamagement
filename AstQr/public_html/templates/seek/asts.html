@@ -1,0 +1,98 @@
+<!--<a onclick="skallsu()" href="#" class="btn-primary">seek all</a>-->
+<br>
+        <button type="button"  class="btn btn-primary" aria-label="seek all" onclick="skallassets('*')">seek all</button>&nbsp;
+        <button class="btn btn-primary"  aria-label="print QR codes" onclick="loadqrcodes()">print QR codes</button>&nbsp;
+        <button id="printasts" type="button" class="btn btn-primary" aria-label="Print as excel" onclick="tableToExcel('skassetsall','All ASSET table')">Print as excel</button>    
+        <br>
+<br>
+<div id="assetspace" class="">
+    
+</div>
+<script>
+    $("#printasts").attr("disabled", "disabled").off('click');
+    </script>
+  
+
+<script>
+function loadqrcodes(){
+    //href="http://localhost:8383/AstQr/index.html"
+     $("#printasts").attr("disabled", "disabled").off('click');
+        $("#assetspace").html("").load("index.html");
+}    
+function skallassets(seeker){
+        $("#printasts").attr("disabled", false).on('click');
+        var vals2={'id' : seeker };
+        var url2="http://localhost:8080/rest2/webresources/assets/retrive?"+$.param(vals2);
+       // resetasset();
+        assetsdtable(url2);
+}
+function resetasset(){
+    $('#assetspace').html("<table id=\"skassetsall\" class=\"table-bordered table table-responsive\" >"+
+     "<thead>"+
+      "<tr>"+
+         "<th>id</th>"+
+         "<th>category</th>"+
+         "<th>type</th>"+
+         "<th>issuedto</th>"+
+         "<th>issuedon</th>"+
+         "<th>returnstatus</th>"+
+         "<th>reeturndate</th>"+
+         "<th>deptid</th>"+
+         "<th>dop</th>"+
+         "<th>po no</th>"+
+         "<th>bill no</th>"+
+         
+      "</tr>"+
+   "</thead>"+
+"</table>");
+     
+}
+function assetsdtable(durl){
+      resetasset();
+    var table=$('#skassetsall').dataTable( {
+            "sAjaxSource": durl,     
+        "aoColumns": [
+            {"data":"idassets"},
+            {"data":"category"},
+            {"data":"type"},
+            {"data":"issuedto"},
+            {"data":"issuedon"},
+            {"data":"returnstatus"},
+            {"data":"reeturndate"},
+            {"data":"deptid"},
+            {"data":"dop"},
+            {"data":"ponum"},
+            {"data":"billno"}
+        ],
+        "bFilter": true,
+      "bJQueryUI": true,
+      "sSearch": "Search"
+        } );
+        
+        table.api().columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+}
+</script>   
+<script>
+                  var tableToExcel = (function() {
+                          var uri = 'data:application/vnd.ms-excel;base64,'
+                                  , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+</script>
+

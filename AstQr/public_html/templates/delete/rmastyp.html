@@ -1,0 +1,35 @@
+<form class="form-horizontal" id="rmastype">
+<fieldset>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label for="rmsuid" class="control-label col-sm-2 col-md-3">Id</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" name="rmsuid" placeholder="enter assettype id to remove" required="">
+    
+  </div>
+</div>
+<!-- Button http://getbootstrap.com/css/#buttons -->
+<div class="form-group">
+  <label class="control-label col-sm-2 col-md-3" ></label>
+  <div class="text-center col-sm-10 col-md-3">
+      <button type="button"  class="btn btn-danger" aria-label="" onclick="rmastype()">remove</button>
+  </div>
+</div>
+
+
+</fieldset>
+</form>
+<script>
+function rmastype(){
+      var rmsuc={
+        'rmid':$("input[name=rmsuid]").val()
+    };
+    $.post("http://localhost:8080/rest2/webresources/astmgt/rmastype?"+EncodeQueryData(rmsuc),
+        function(data){
+            alert(data);
+        }).fail(function(data){
+            alert("error:"+data);
+        });
+
+}    
+</script>

@@ -1,0 +1,28 @@
+<form class="form-horizontal">
+<fieldset>
+<div class="form-group">
+  <label for="textinput" class="control-label">Permit user</label>
+  
+    <input type="text" class="form-control" id="textinput" placeholder="enter id to permit">
+  
+</div>
+<div class="form-group">
+  <div class="text-right col-sm-10">
+    <div  class="btn-group" role="group" aria-label="">
+        <button type="button" onclick="permituser()" id="perusr" name="perusr" class="btn btn-success" aria-label="submit">submit</button>
+      <button type="reset" id="rst" name="rst" class="btn btn-inverse" aria-label="reset">reset</button>
+    </div>
+  </div>
+</div>
+</fieldset>
+</form>
+<script>
+function permituser(){
+    var url="http://localhost:8080/rest2/webresources/user/permit?"+$.param({id:$('input[name="perusr"]').val()});
+    $.post(url,function(data){
+        alert(data);
+    }).fail(function(data){
+        alert(data);
+    });
+}
+</script>

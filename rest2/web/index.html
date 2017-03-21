@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            $(document).ready(function() {
+            $("#one").click(function(){
+                    document.getElementById("one1").innerHTML="<p>hello</p>"
+            });        
+        });
+            </script>
+        <button id="one">TODO write content</button>
+        <div id="one1"></div>
+          <center>
+        <form name="asst">
+        category:<input type='text' name='category'/><br>
+        type:<input type='text' name='type'/><br>
+        info:<input type='text' name='info'/><br>
+        <input type="image" name="qrh" hidden="hidden"/>
+        </form><br>
+      <button id="button">submit</button><br>
+      <button onclick="printit()">print</button>
+<div id="results">
+    <p>sxsxsx</p>    
+    </div>
+    </center>
+    
+    <script>  
+    function EncodeQueryData(data)
+{
+   var ret = [];
+   for (var d in data)
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+   return ret.join("&");
+}
+/*to write html in new window
+ *  myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+ *  
+ *  to print a content
+ *  refer notepad++
+ */
+$(document).ready(function(){
+        $("#button").click(function(){
+            var vals2={'category': $("input[name=category]").val(),
+          'type': $("input[name=type]").val(),
+          'inf':JSON.stringify($("input[name=info]").val()),
+          'qrh':($("input[name=category]").val()+'-'+$("input[name=type]").val()).toString()
+      };
+    
+        $.post("http://localhost:8080/rest2/webresources/assets/addasset?"+EncodeQueryData(vals2),
+        function(data){
+            alert("Data: " + data+"\n");
+            var vals= { 'qrtext':data.toString()};
+             var a1=document.getElementById("results");
+        url = "http://localhost:8080/rest2/webresources/assets/getqr?"+EncodeQueryData(vals);
+       
+    a1.innerHTML="<img src=\""+url+"\"/>";
+       
+        })
+  .fail(function() {
+    alert( "error" );
+  });
+    });
+});
+</script>
+ 
+<SCRIPT Language="Javascript">
+
+/*
+This script is written by Eric (Webcrawl@usa.net)
+For full source code, installation instructions,
+100's more DHTML scripts, and Terms Of
+Use, visit dynamicdrive.com
+*/
+
+function printit(){  
+if (window.print) {
+    var vals= { 'qrtext': 'George'};
+            url = "http://localhost:8080/rest2/webresources/assets/getqr?"+EncodeQueryData(vals);
+    var myWindow = window.open(url, "MsgWindow");
+    myWindow.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script>
+
+  
+    </body>
+</html>

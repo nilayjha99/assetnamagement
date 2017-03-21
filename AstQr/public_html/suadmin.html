@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <!-- DataTables CSS -->
+    <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="vendor/restabs/css/tabdrop.css"></script>
+    <!-- DataTables JavaScript -->
+    
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navbar-top-starts -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <p class="navbar-brand">SU Admin</p>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!--dropdown-messages-ends -->
+                </li>
+                <!-- dropdown-user-start -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" >
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a onclick="seekprofile(this)"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a onclick="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!--dropdown-user-ends -->
+                </li>
+                <!-- nav-bar-dropdowns-ends -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <!--<li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!--/input-group
+                        </li>-->
+                        <li>
+                            <a href="#" onclick="aws()"><i class="fa fa-bar-chart-o fa-fw"></i>wrap tabs</a>
+                        </li>
+                        
+                        <li><!--fa fa-wrench fa-fw-->
+                            <a href=“javascript:void(0)”><i class="fa fa-edit fa-fw"></i>Manage Users<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#" onclick="addtab('superadmin','sumgmt')">Super Admin</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="addtab('admin','admgt')">Admin</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="addtab('user','usrmgt')">Others</a>
+                                </li>
+                                
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href=“javascript:void(0)”><i class="fa fa-table fa-fw"></i>Manage Asset info<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#" onclick="addtab('assettype','astypmgt')">Manage asset types</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="addtab('asset','astmgt')">Manage assets</a>
+                                </li>
+                                
+                                
+                            </ul>
+                        </li>
+                        
+                                            </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">work area</h1>
+                        <div class="well">
+                            <div class="tabbable">
+  <ul class="nav nav-tabs" id="tabber">
+   <!--<li><a data-toggle="tab" href="#home">Home</a></li>-->
+  </ul>
+
+  <div class="tab-content" id="tarea">
+    <!--<div id="home" class="tab-pane fade in active">
+      <h3>HOME</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>-->
+  </div>
+</div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+  
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="vendor/restabs/js/bootstrap-tabdrop.js"></script>
+    <script src="dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript">
+         var catbool=false;
+     function EncodeQueryData(data)
+{
+   var ret = [];
+   for (var d in data)
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+   return ret.join("&");
+}
+    $(document).ready(function () {
+       /* var vals={'id' : '*' };
+        var url="http://localhost:8080/rest2/webresources/astmgt/get?"+EncodeQueryData(vals);
+        $.get(url,function(data){
+           $("#ooo").html(data);
+        });*/
+     if(sessionStorage.getItem("astsudata")===null){
+            window.location.href="login.html";
+        }
+        
+    });
+    function aws(){
+        $('.nav-tabs').tabdrop('layout');
+    }
+    function logout(){
+        sessionStorage.removeItem("astsudata");
+   sessionStorage.removeItem("astfirstname");
+   sessionStorage.removeItem("astlastname");
+   sessionStorage.removeItem("astemail");
+   sessionStorage.removeItem("astpassword");
+   sessionStorage.removeItem("astdateofbirth");
+   window.location.href="login.html";
+        
+    }
+    function seekprofile(context){
+        $(context.parentNode).html("<center><br>"+sessionStorage.getItem("astfirstname")+" "+sessionStorage.getItem("astlastname")+"<br>"
+                +sessionStorage.getItem("astemail")+"<br>"+sessionStorage.getItem("astpassword")+"<br>"+sessionStorage.getItem("astdateofbirth")+"<br>");  
+    }
+     var tabcount=0;
+     var tabs=0;
+    function removetab(comp){
+        var anchor = $(comp).siblings('a');
+        var as=$(comp).parent().attr('href');
+        //alert(as);
+        $("#tarea > "+as).remove();
+        $(comp).parent().parent().remove();
+        tabs--;
+    }
+   
+    function addtab(name,content){
+        $("#tabber").append("<li><a data-toggle=\"tab\"href="+"\"#"+name+""+tabcount+"\""+">"+name+"&nbsp;<span onclick=\"removetab(this)\" \" class=\"glyphicon glyphicon-remove\"></span>"+"</a>"
+          +"</li>");
+  if(tabs===0){
+        $("#tarea").append("<div id=\""+name+""+tabcount+"\" class=\"tab-pane  fade in active\"></div>");
+  }
+  else{
+          $("#tarea").append("<div id=\""+name+""+tabcount+"\" class=\"tab-pane\"></div>");
+  }
+    $("#"+name+""+tabcount+"").load("templates/"+content+".html");
+            tabcount++;
+            tabs++;
+        
+    }
+    
+    function replace(content,context){
+        $(context).parent().html("").load("templates/"+content+".html");
+    }
+    function inputtojson(inval){
+        if(inval.includes(",")){
+       return inval.split(',').reduce(function(o,pair) {
+   pair = pair.split(':');
+   key=pair[0];
+   return o[key] = pair[1], o;
+}, {});
+        }
+        else if(inval.includes(":")){
+            return inval.reduce(function(o,pair) {
+   pair = pair.split(':');
+   key=pair[0];
+   return o[key] = pair[1], o;
+}, {});
+        }
+    }
+</script>
+ 
+</body>
+
+</html>

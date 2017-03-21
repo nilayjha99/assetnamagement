@@ -1,0 +1,92 @@
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optadmin" value="SA">Super Admin
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="optadmin" value="A">Admin
+    </label>
+                                <br>
+                                <br>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <a onclick="login()" class="btn btn-lg btn-success btn-block">Login</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    function login(){
+        var creds={
+        'user':$("input[name=email]").val(),
+        'psswd':$("input[name=password]").val()
+    };
+    var url;
+    if( $("input[name='optadmin']:checked"). val()==="SA"){
+        url="http://localhost:8080/rest2/webresources/superadmin/login?"+EncodeQueryData(creds);
+        $.get(url,function(data1){
+            data1=JSON.stringify(data1);
+            var usrdt=JSON.parse(data1);
+            var uname;
+            alert(uname);
+            if(sessionStorage){
+    // Store data
+   sessionStorage.setItem("astsudata",data1);
+   sessionStorage.setItem("astfirstname", usrdt.data[0].firstname.toString());
+   sessionStorage.setItem("astlastname", usrdt.data[0].lastname.toString());
+   sessionStorage.setItem("astemail", usrdt.data[0].email.toString());
+   sessionStorage.setItem("astpassword", usrdt.data[0].password.toString());
+   sessionStorage.setItem("astdateofbirth", usrdt.data[0].dob.toString());
+   window.location.href="suadmin.html";
+    // Retrieve data
+    alert("Hi, " + sessionStorage.getItem("astfirstname") + " " + sessionStorage.getItem("astlastname"));
+} else{
+    alert("use updated browser");
+}
+           // localStorage.setItem('userdata',data);
+    });
+    }
+    else if( $("input[name='optadmin']:checked"). val()==="A")
+    {
+        url="http://localhost:8080/rest2/webresources/admin/login?"+EncodeQueryData(creds);
+        $.get(url,function(data1){
+            data1=JSON.stringify(data1);
+            var usrdt=JSON.parse(data1);
+            alert(usrdt.data[0]);
+            if(sessionStorage){
+    // Store data
+   sessionStorage.setItem("astadmdata",data1);
+    sessionStorage.setItem("astadmfirstname", usrdt.data[0].firstname.toString());
+   sessionStorage.setItem("astadmlastname", usrdt.data[0].lastname.toString());
+   sessionStorage.setItem("astadmemail", usrdt.data[0].email.toString());
+   sessionStorage.setItem("astadmpassword", usrdt.data[0].password.toString());
+   sessionStorage.setItem("astadmdateofbirth", usrdt.data[0].dob.toString());
+   sessionStorage.setItem("asradmdept",usrdt.data[0].department.toString());
+   window.location.href="admin.html";
+    // Retrieve data
+    alert("Hi, " + sessionStorage.getItem("astadmfirstname") + " " + sessionStorage.getItem("astadmlastname"));
+} else{
+    alert("use updated browser");
+}
+           // localStorage.setItem('userdata',data);
+    });
+    }
+    }
+</script>
+

@@ -1,0 +1,188 @@
+<!--<a onclick="skallsu()" href="#" class="btn-primary">seek all</a>-->
+<br>
+        <button type="button"  class="btn btn-primary" aria-label="seek all" onclick="skallastype('*')">seek all</button>&nbsp;
+        <button type="button" class="btn btn-primary" aria-label="seek by id" data-toggle="modal" data-target="#skastypeid">seek by id</button>&nbsp;
+        <button type="button" class="btn btn-primary" aria-label="seek by range" data-toggle="modal" data-target="#skastyper">seek by range</button>    
+        <button id="printastype" type="button" class="btn btn-primary" aria-label="Print as excel" onclick="tableToExcel('skastypeall','ASSETTYPE table')">Print as excel</button>
+        <br>
+<br>
+<script>
+    $("#printastype").attr("disabled", "disabled").off('click');
+    </script>
+<div id="astypespace" class="">
+    
+</div>
+  <div class="container">
+  <!-- Modal fur su by id-->
+  <div class="modal fade" id="skastypeid" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" >
+<fieldset>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label  class="control-label col-sm-2 col-md-3">Id</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="text" class="form-control" name="astypeskid" placeholder="enter super admin id to seek" required="">
+  </div>
+</div>
+<!-- Button http://getbootstrap.com/css/#buttons -->
+<div class="form-group">
+  <label class="control-label col-sm-2 col-md-3" ></label>
+  <div class="text-center col-sm-10 col-md-3">
+      <button type="button"  class="btn btn-success" aria-label="" onclick="skastypebyid()">seek</button>
+  </div>
+</div>
+<script>
+    function skastypebyid(){
+        $("#printastype").attr("disabled", false).on('click');
+        var qw=$('input[name="astypeskid"]').val();
+        skallastype(qw);
+    }
+    </script>
+</fieldset>
+</form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!--modal for su by id ends-->
+  <!-- modal for su by range starts--->
+    <!-- Modal -->
+  <div class="modal fade" id="skastyper" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="skastyperng">
+<fieldset>
+<!-- Text input http://getbootstrap.com/css/#forms -->
+<div class="form-group">
+  <label  class="control-label col-sm-2 col-md-3">Id</label>
+  <div class="col-sm-10 col-md-3">
+    <input type="number" class="form-control" name="astypestskid" placeholder="start from" required="">
+    <input type="number" class="form-control" name="astypeenskid" placeholder="seek upto" required="">
+  </div>
+</div>
+<!-- Button http://getbootstrap.com/css/#buttons -->
+<div class="form-group">
+  <label class="control-label col-sm-2 col-md-3" ></label>
+  <div class="text-center col-sm-10 col-md-3">
+      <button type="button"  class="btn btn-success" aria-label="" onclick="skastypebyr()">seek</button>
+  </div>
+</div>
+<script>
+    function skastypebyr(){
+        $("#printastype").attr("disabled", false).on('click');
+        var st=$('input[name="astypestskid"]').val();
+        var en=$('input[name="astypeenskid"]').val();
+        skrngastype(st,en);
+    }
+    </script>
+</fieldset>
+</form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!--modal for su by range ends-->
+</div>
+
+<script>
+function skallastype(seeker){
+        $("#printastype").attr("disabled", false).on('click');
+        var vals2={'id' : seeker };
+        var url2="http://localhost:8080/rest2/webresources/astmgt/get?"+$.param(vals2);
+        //resetastype();
+        astypedtable(url2);
+}
+function skrngastype(st1,en1){
+    var vals2={'st':st1,'en':en1};
+    var url2="http://localhost:8080/rest2/webresources/astmgt/seek?"+$.param(vals2);
+    //resetastype();
+    astypedtable(url2);
+}
+function resetastype(){
+    $('#astypespace').html("<table id=\"skastypeall\" class=\"table-bordered table table-responsive\" >"+
+     "<thead>"+
+      "<tr>"+
+         "<th>id</th>"+
+         "<th>category</th>"+
+         "<th>type</th>"+
+         "<th>info</th>"+
+         "<th>count</th>"+
+         "<th>depricated</th>"+
+         "<th>rate</th>"+
+      "</tr>"+
+   "</thead>"+
+"</table>");
+}
+function astypedtable(durl){
+    resetastype();
+        var table=$('#skastypeall').dataTable( {
+            "sAjaxSource": durl,     
+        "aoColumns": [
+            {"data":"idassettypes"},
+            {"data":"category"},
+            {"data":"type"},
+            {"data":"details"},
+            {"data":"count"},
+            {"data":"depricated"},
+            {"data":"rate"}
+        ],
+        "bFilter": true,
+      "bJQueryUI": true,
+      "sSearch": "Search"
+        } );
+        
+        table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+}
+</script> 
+<script>
+                  var tableToExcel = (function() {
+                          var uri = 'data:application/vnd.ms-excel;base64,'
+                                  , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+    </script>
+
+
